@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guerra Sagrada: Skibidi Apocalypse</title>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; margin: 0; height: 100%; background-color: #222; color: white; }
+        canvas { background: #111; display: block; margin: auto; }
+        #startScreen, #endScreen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        #startScreen { display: block; }
+        #endScreen { display: none; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #444; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Guerra Sagrada: Skibidi Apocalypse</h1>
+
+    <!-- Pantalla de inicio -->
+    <div id="startScreen">
+        <p>Haz clic en "Jugar" para comenzar</p>
+        <button onclick="iniciarJuego()">Jugar</button>
+    </div>
+
+    <!-- Pantalla final -->
+    <div id="endScreen">
+        <p id="result"></p>
+        <button onclick="reiniciarJuego()">Volver a jugar</button>
+    </div>
+
+    <!-- Canvas -->
+    <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+    <p id="timer">Tiempo: 0s</p>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const timerElement = document.getElementById("timer");
+        const resultElement = document.getElementById("result");
+        const startScreen = document.getElementById("startScreen");
+        const endScreen = document.getElementById("endScreen");
+
+        let startTime = 0;
+        let gameStarted = false;
+        let juegoTerminado = false;
+
+        const habitaciones = [
+            { x: 0, y: 0, width: 1280, height: 720 },
+            { x: 1280, y: 0, width: 1280, height: 720 },
+            { x: 0, y: 720, width: 1280, height: 720 },
+        ];
+        let currentRoomIndex = 0;
+
+        class Personaje {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.experiencia = 0;
+                this.nivel = 1;
+            }
+            dibujar() {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y, 50, 50);
+            }
+            atacar(enemigo) {
+                if (Math.abs(this.x - enemigo.x) < 50 && Math.abs(this.y - enemigo.y) < 50 && enemigo.vivo) {
+                    enemigo.vivo = false;
+                    this.experiencia += 10;
+                    if (this.experiencia >= 50) {
+                        this.nivel++;
+                        this.experiencia = 0;
+                        console.log("¡Subiste de nivel! Nivel: " + this.nivel);
+                    }
+                }
+            }
+        }
+
+        class Enemigo {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vivo = true;
+            }
+            dibujar() {
+                if (this.vivo) {
+                    ctx.fillStyle = "red";
+                    ctx.fillRect(this.x, this.y, 50, 50);
+                }
+            }
+        }
+
+        const jugador = new Personaje(600, 500, "blue");
+        const enemigos = [];
+        for (let i = 0; i < 20; i++) {
+            enemigos.push(new Enemigo(Math.random() * 1230, Math.random() * 680));
+        }
+
+        function dibujarHabitacion() {
+            const room = habitaciones[currentRoomIndex];
+            ctx.fillStyle = "#555";
+            ctx.fillRect(room.x, room.y, room.width, room.height);
+        }
+
+        function actualizarJuego() {
+            if (!gameStarted) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            dibujarHabitacion();
+            jugador.dibujar();
+            enemigos.forEach(enemigo => {
+                enemigo.dibujar();
+                jugador.atacar(enemigo);
+            });
+
+            let tiempoTranscurrido = ((Date.now() - startTime) / 1000).toFixed(1);
+            timerElement.innerText = "Tiempo: " + tiempoTranscurrido + "s";
+
+            if (enemigos.every(enemigo => !enemigo.vivo)) {
+                resultadoJuego(tiempoTranscurrido);
+            } else {
+                requestAnimationFrame(actualizarJuego);
+            }
+        }
+
+        function resultadoJuego(tiempo) {
+            juegoTerminado = true;
+            resultElement.innerText = "¡Ganaste! Tiempo final: " + tiempo + "s";
+            endScreen.style.display = "block"; // Mostrar pantalla final
+        }
+
+        function iniciarJuego() {
+            startScreen.style.display = "none"; // Ocultar pantalla de inicio
+            gameStarted = true;
+            startTime = Date.now();
+            actualizarJuego();
+        }
+
+        function reiniciarJuego() {
+            juegoTerminado = false;
+            startScreen.style.display = "none"; // Asegurarse de que la pantalla de inicio esté oculta
+            endScreen.style.display = "none"; // Ocultar pantalla final
+            resultElement.innerText = ""; // Limpiar el mensaje de resultado
+            enemigos.forEach(enemigo => enemigo.vivo = true); // Reaparecer enemigos
+            jugador.x = 600; // Resetear la posición del jugador
+            jugador.y = 500;
+            startTime = Date.now(); // Reiniciar el tiempo
+            gameStarted = true;
+            actualizarJuego(); // Empezar de nuevo el juego
+        }
+
+        document.addEventListener("keydown", function(event) {
+            if (gameStarted && !juegoTerminado) {
+                if (event.key === "ArrowLeft") jugador.x -= 20;
+                if (event.key === "ArrowRight") jugador.x += 20;
+                if (event.key === "ArrowUp") jugador.y -= 20;
+                if (event.key === "ArrowDown") jugador.y += 20;
+            }
+        });
+
+    </script>
+</body>
+</html>
