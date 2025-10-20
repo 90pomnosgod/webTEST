@@ -1,160 +1,180 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Guerra Sagrada: Skibidi Apocalypse</title>
-    <style>
-        body { text-align: center; font-family: Arial, sans-serif; margin: 0; height: 100%; background-color: #222; color: white; }
-        canvas { background: #111; display: block; margin: auto; }
-        #startScreen, #endScreen { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
-        #startScreen { display: block; }
-        #endScreen { display: none; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #444; color: white; border: none; border-radius: 5px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centro de Streams — UrielGamer & Optijuegos</title>
+<style>
+  :root{
+    --bg:#0a0b0d;
+    --panel:#101214;
+    --accent:#1db954;
+    --muted:#ccc;
+  }
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--bg);
+    color:var(--muted);
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+  }
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 16px;
+    background:#0f1113;
+    border-bottom:1px solid #222;
+  }
+  header h1{font-size:18px;color:white;margin:0;}
+  .btn{background:#1db954;border:none;border-radius:6px;padding:6px 12px;color:white;font-weight:600;cursor:pointer;}
+  main{flex:1;overflow:auto;}
+  .streams-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(400px,1fr));
+    grid-auto-rows:300px;
+    gap:10px;
+    padding:10px;
+  }
+  iframe.stream{
+    width:100%;
+    height:100%;
+    border:0;
+    border-radius:10px;
+    background:black;
+  }
+  /* Chat panel */
+  .chat-panel{
+    position:fixed;
+    right:10px;
+    bottom:10px;
+    width:320px;
+    max-height:70vh;
+    background:#111;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    border:1px solid #333;
+  }
+  .chat-header{padding:8px;background:#222;font-weight:bold;text-align:center;}
+  .messages{flex:1;padding:8px;overflow:auto;display:flex;flex-direction:column;gap:6px;}
+  .msg{background:#1a1a1a;padding:6px 8px;border-radius:6px;max-width:85%;}
+  .msg.me{align-self:flex-end;background:#1db95433;}
+  .chat-input{display:flex;gap:5px;padding:8px;background:#1a1a1a;}
+  .chat-input input{flex:1;border:none;border-radius:6px;padding:6px;background:#111;color:white;}
+  .chat-input button{background:#1db954;border:none;border-radius:6px;padding:6px 10px;color:white;font-weight:600;cursor:pointer;}
+  /* Descargas */
+  .downloads{
+    background:#0e1012;
+    border-top:1px solid #222;
+    padding:12px;
+  }
+  .game{background:#151718;border-radius:8px;padding:10px;margin-bottom:8px;}
+  .game h3{margin:0;color:white;font-size:15px;}
+  .game a{color:var(--accent);text-decoration:none;font-size:14px;}
+  footer{text-align:center;padding:8px;color:#888;font-size:12px;border-top:1px solid #222;}
+  @media(max-width:600px){
+    .streams-grid{grid-template-columns:1fr;}
+  }
+</style>
 </head>
 <body>
-    <h1>Guerra Sagrada: Skibidi Apocalypse</h1>
 
-    <!-- Pantalla de inicio -->
-    <div id="startScreen">
-        <p>Haz clic en "Jugar" para comenzar</p>
-        <button onclick="iniciarJuego()">Jugar</button>
+<header>
+  <h1>🎮 Streams: UrielGamer & Optijuegos</h1>
+  <button class="btn" id="toggleChat">💬 Chat</button>
+</header>
+
+<main>
+  <!-- STREAMS -->
+  <section class="streams-grid">
+    <!-- UrielGamer (Twitch) -->
+    <iframe class="stream"
+      src="https://player.twitch.tv/?channel=urielgamer&parent=example.com"
+      allowfullscreen></iframe>
+
+    <!-- Optijuegos (Twitch) -->
+    <iframe class="stream"
+      src="https://player.twitch.tv/?channel=optijuegos&parent=example.com"
+      allowfullscreen></iframe>
+
+    <!-- Optijuegos (Kick) -->
+    <iframe class="stream"
+      src="https://player.kick.com/optijuegos?autoplay=false"
+      allowfullscreen></iframe>
+
+    <!-- Canal extra (ejemplo Twitch) -->
+    <iframe class="stream"
+      src="https://player.twitch.tv/?channel=streamingexample&parent=example.com"
+      allowfullscreen></iframe>
+  </section>
+
+  <!-- DESCARGAS -->
+  <section class="downloads">
+    <h2>📥 Descargas de juegos</h2>
+    <div class="game">
+      <h3>South park The Stick Of The Truee</h3>
+      <p>Plataforma: Windows • Tamaño: 45 MB</p>
+      <a href="/downloads/super-pixel-runner.zip" download>Descargar</a>
     </div>
-
-    <!-- Pantalla final -->
-    <div id="endScreen">
-        <p id="result"></p>
-        <button onclick="reiniciarJuego()">Volver a jugar</button>
+    <div class="game">
+      <h3>Issac survival (HTML)</h3>
+      <p>HTML5 • Tamaño: 4 MB</p>
+      <a href="/downloads/aventura-retro.zip" download>Descargar ZIP</a> |
+      <a href="/downloads/aventura-retro/index.html" target="_blank">Jugar Online</a>
     </div>
+  </section>
+</main>
 
-    <!-- Canvas -->
-    <canvas id="gameCanvas" width="1280" height="720"></canvas>
+<!-- CHAT -->
+<div class="chat-panel" id="chatPanel" style="display:none;">
+  <div class="chat-header">Chat general</div>
+  <div class="messages" id="messages"></div>
+  <div class="chat-input">
+    <input id="nick" placeholder="Tu nombre">
+    <input id="msg" placeholder="Escribe...">
+    <button id="send">Enviar</button>
+  </div>
+</div>
 
-    <p id="timer">Tiempo: 0s</p>
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const timerElement = document.getElementById("timer");
-        const resultElement = document.getElementById("result");
-        const startScreen = document.getElementById("startScreen");
-        const endScreen = document.getElementById("endScreen");
+<footer>© 2025 Centro de Streams — hecho con ♥</footer>
 
-        let startTime = 0;
-        let gameStarted = false;
-        let juegoTerminado = false;
+<script>
+const chatPanel=document.getElementById('chatPanel');
+document.getElementById('toggleChat').onclick=()=>{
+  chatPanel.style.display = chatPanel.style.display==='none'?'flex':'none';
+};
+const messages=document.getElementById('messages');
+const nick=document.getElementById('nick');
+const msg=document.getElementById('msg');
+const send=document.getElementById('send');
 
-        const habitaciones = [
-            { x: 0, y: 0, width: 1280, height: 720 },
-            { x: 1280, y: 0, width: 1280, height: 720 },
-            { x: 0, y: 720, width: 1280, height: 720 },
-        ];
-        let currentRoomIndex = 0;
-
-        class Personaje {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.experiencia = 0;
-                this.nivel = 1;
-            }
-            dibujar() {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, 50, 50);
-            }
-            atacar(enemigo) {
-                if (Math.abs(this.x - enemigo.x) < 50 && Math.abs(this.y - enemigo.y) < 50 && enemigo.vivo) {
-                    enemigo.vivo = false;
-                    this.experiencia += 10;
-                    if (this.experiencia >= 50) {
-                        this.nivel++;
-                        this.experiencia = 0;
-                        console.log("¡Subiste de nivel! Nivel: " + this.nivel);
-                    }
-                }
-            }
-        }
-
-        class Enemigo {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.vivo = true;
-            }
-            dibujar() {
-                if (this.vivo) {
-                    ctx.fillStyle = "red";
-                    ctx.fillRect(this.x, this.y, 50, 50);
-                }
-            }
-        }
-
-        const jugador = new Personaje(600, 500, "blue");
-        const enemigos = [];
-        for (let i = 0; i < 20; i++) {
-            enemigos.push(new Enemigo(Math.random() * 1230, Math.random() * 680));
-        }
-
-        function dibujarHabitacion() {
-            const room = habitaciones[currentRoomIndex];
-            ctx.fillStyle = "#555";
-            ctx.fillRect(room.x, room.y, room.width, room.height);
-        }
-
-        function actualizarJuego() {
-            if (!gameStarted) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            dibujarHabitacion();
-            jugador.dibujar();
-            enemigos.forEach(enemigo => {
-                enemigo.dibujar();
-                jugador.atacar(enemigo);
-            });
-
-            let tiempoTranscurrido = ((Date.now() - startTime) / 1000).toFixed(1);
-            timerElement.innerText = "Tiempo: " + tiempoTranscurrido + "s";
-
-            if (enemigos.every(enemigo => !enemigo.vivo)) {
-                resultadoJuego(tiempoTranscurrido);
-            } else {
-                requestAnimationFrame(actualizarJuego);
-            }
-        }
-
-        function resultadoJuego(tiempo) {
-            juegoTerminado = true;
-            resultElement.innerText = "¡Ganaste! Tiempo final: " + tiempo + "s";
-            endScreen.style.display = "block"; // Mostrar pantalla final
-        }
-
-        function iniciarJuego() {
-            startScreen.style.display = "none"; // Ocultar pantalla de inicio
-            gameStarted = true;
-            startTime = Date.now();
-            actualizarJuego();
-        }
-
-        function reiniciarJuego() {
-            juegoTerminado = false;
-            startScreen.style.display = "none"; // Asegurarse de que la pantalla de inicio esté oculta
-            endScreen.style.display = "none"; // Ocultar pantalla final
-            resultElement.innerText = ""; // Limpiar el mensaje de resultado
-            enemigos.forEach(enemigo => enemigo.vivo = true); // Reaparecer enemigos
-            jugador.x = 600; // Resetear la posición del jugador
-            jugador.y = 500;
-            startTime = Date.now(); // Reiniciar el tiempo
-            gameStarted = true;
-            actualizarJuego(); // Empezar de nuevo el juego
-        }
-
-        document.addEventListener("keydown", function(event) {
-            if (gameStarted && !juegoTerminado) {
-                if (event.key === "ArrowLeft") jugador.x -= 20;
-                if (event.key === "ArrowRight") jugador.x += 20;
-                if (event.key === "ArrowUp") jugador.y -= 20;
-                if (event.key === "ArrowDown") jugador.y += 20;
-            }
-        });
-
-    </script>
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function addMsg(name,text,me=false){
+  const div=document.createElement('div');
+  div.className='msg'+(me?' me':'');
+  div.innerHTML=`<strong>${escapeHtml(name)}:</strong> ${escapeHtml(text)}`;
+  messages.appendChild(div);
+  messages.scrollTop=messages.scrollHeight;
+}
+send.onclick=()=>{
+  if(!msg.value.trim())return;
+  const name=nick.value.trim()||'Anon';
+  const text=msg.value.trim();
+  addMsg(name,text,true);
+  const arr=JSON.parse(localStorage.getItem('chatmsgs')||'[]');
+  arr.push({n:name,t:text});
+  if(arr.length>100)arr.shift();
+  localStorage.setItem('chatmsgs',JSON.stringify(arr));
+  msg.value='';
+};
+window.addEventListener('load',()=>{
+  const arr=JSON.parse(localStorage.getItem('chatmsgs')||'[]');
+  arr.forEach(m=>addMsg(m.n,m.t));
+});
+</script>
 </body>
 </html>
