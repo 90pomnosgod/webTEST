@@ -3,99 +3,122 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cuenta regresiva — 28 de noviembre 14:30 (Argentina)</title>
+  <title>🎉 Cuentas regresivas</title>
   <style>
-    :root{ --bg:#0f1724; --card:#0b1220; --accent:#7dd3fc; --muted:#9ca3af; }
+    :root {
+      --bg1: linear-gradient(180deg,#021028 0%,#081022 100%);
+      --bg2: linear-gradient(180deg,#03172d 0%,#081835 100%);
+      --bg3: linear-gradient(180deg,#062e0a 0%,#123b10 100%);
+      --bg4: linear-gradient(180deg,#1b1830 0%,#0a0a1f 100%);
+      --card: rgba(255,255,255,0.05);
+      --muted:#9ca3af;
+      --accent1:#7dd3fc; --accent2:#7da7fc; --accent3:#7ef07a; --accent4:#ffd56a;
+    }
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#e6eef8;background:linear-gradient(180deg,#021028 0%,#081022 100%)}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6);width:min(720px,94%);text-align:center}
-    h1{margin:0 0 10px;font-size:20px;letter-spacing:0.4px}
+    body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#e6eef8;background:var(--bg1);transition:background 1s;}
+    .section{width:100%;display:flex;justify-content:center;padding:40px 0;}
+    .card{background:var(--card);padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6);width:min(720px,94%);text-align:center}
+    h1{margin:0 0 10px;font-size:22px;letter-spacing:0.4px}
     .target{color:var(--muted);font-size:14px;margin-bottom:22px}
     .count{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
     .segment{background:rgba(255,255,255,0.02);padding:14px 18px;border-radius:12px;min-width:110px}
-    .num{font-size:30px;font-weight:700;color:var(--accent);}
+    .num{font-size:30px;font-weight:700}
     .label{font-size:13px;color:var(--muted);margin-top:6px}
-    .textline{margin-top:18px;color:var(--muted)}
     @media (max-width:420px){.num{font-size:24px}.segment{min-width:86px}}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Cuenta regresiva</h1>
-    <div class="target">Faltan — hasta <strong>28 de noviembre a las 14:30 (hora argentina)</strong></div>
-
-    <div id="mainText" class="textline" style="font-size:18px;margin-bottom:12px"></div>
-
-    <div class="count" aria-live="polite">
-      <div class="segment">
-        <div id="days" class="num">0</div>
-        <div class="label">días</div>
-      </div>
-      <div class="segment">
-        <div id="hours" class="num">0</div>
-        <div class="label">horas</div>
-      </div>
-      <div class="segment">
-        <div id="minutes" class="num">0</div>
-        <div class="label">minutos</div>
-      </div>
-      <div class="segment">
-        <div id="seconds" class="num">0</div>
-        <div class="label">segundos</div>
+  <!-- 28 de noviembre 14:30 -->
+  <div class="section" style="background:var(--bg1)">
+    <div class="card">
+      <h1>🕓 Cuenta regresiva — 28 de noviembre a las 14:30</h1>
+      <div class="target">Faltan — hasta <strong>28 de noviembre a las 14:30 (hora argentina)</strong></div>
+      <div class="count" id="count1">
+        <div class="segment"><div class="num" id="days1">0</div><div class="label">días</div></div>
+        <div class="segment"><div class="num" id="hours1">0</div><div class="label">horas</div></div>
+        <div class="segment"><div class="num" id="minutes1">0</div><div class="label">minutos</div></div>
+        <div class="segment"><div class="num" id="seconds1">0</div><div class="label">segundos</div></div>
       </div>
     </div>
-
-    <div style="margin-top:18px;color:var(--muted);font-size:13px">Zona horaria: <strong>Argentina (GMT-3)</strong></div>
   </div>
 
-  <script>
-    // Objetivo: 28 de noviembre a las 14:30 (hora argentina, GMT-3)
-    function getTargetDate() {
-      const now = new Date();
-      const year = now.getFullYear();
-      // mes 10 = noviembre (0-indexed)
-      let target = new Date(Date.UTC(year, 10, 28, 17, 30, 0)); // 14:30 GMT-3 = 17:30 UTC
-      if (now.getTime() >= target.getTime()) {
-        target = new Date(Date.UTC(year + 1, 10, 28, 17, 30, 0));
-      }
-      return target;
-    }
+  <!-- 28 de noviembre 17:00 -->
+  <div class="section" style="background:var(--bg2)">
+    <div class="card">
+      <h1>🕔 Cuenta regresiva — 28 de noviembre a las 17:00</h1>
+      <div class="target">Faltan — hasta <strong>28 de noviembre a las 17:00 (hora argentina)</strong></div>
+      <div class="count" id="count2">
+        <div class="segment"><div class="num" id="days2">0</div><div class="label">días</div></div>
+        <div class="segment"><div class="num" id="hours2">0</div><div class="label">horas</div></div>
+        <div class="segment"><div class="num" id="minutes2">0</div><div class="label">minutos</div></div>
+        <div class="segment"><div class="num" id="seconds2">0</div><div class="label">segundos</div></div>
+      </div>
+    </div>
+  </div>
 
-    const target = getTargetDate();
+  <!-- Navidad -->
+  <div class="section" style="background:var(--bg3)">
+    <div class="card">
+      <h1>🎄 Cuenta regresiva — 25 de diciembre a las 00:00</h1>
+      <div class="target">Faltan — hasta <strong>25 de diciembre a las 00:00 (Navidad)</strong></div>
+      <div class="count" id="count3">
+        <div class="segment"><div class="num" id="days3">0</div><div class="label">días</div></div>
+        <div class="segment"><div class="num" id="hours3">0</div><div class="label">horas</div></div>
+        <div class="segment"><div class="num" id="minutes3">0</div><div class="label">minutos</div></div>
+        <div class="segment"><div class="num" id="seconds3">0</div><div class="label">segundos</div></div>
+      </div>
+    </div>
+  </div>
 
-    const $days = document.getElementById('days');
-    const $hours = document.getElementById('hours');
-    const $minutes = document.getElementById('minutes');
-    const $seconds = document.getElementById('seconds');
-    const $mainText = document.getElementById('mainText');
+  <!-- Año Nuevo -->
+  <div class="section" style="background:var(--bg4)">
+    <div class="card">
+      <h1>🎆 Cuenta regresiva — 1 de enero a las 00:00</h1>
+      <div class="target">Faltan — hasta <strong>1 de enero a las 00:00 (Año Nuevo)</strong></div>
+      <div class="count" id="count4">
+        <div class="segment"><div class="num" id="days4">0</div><div class="label">días</div></div>
+        <div class="segment"><div class="num" id="hours4">0</div><div class="label">horas</div></div>
+        <div class="segment"><div class="num" id="minutes4">0</div><div class="label">minutos</div></div>
+        <div class="segment"><div class="num" id="seconds4">0</div><div class="label">segundos</div></div>
+      </div>
+    </div>
+  </div>
 
-    function update() {
-      const now = new Date();
-      const diff = Math.max(0, target - now);
+<script>
+function createCountdown(targetDate, prefix) {
+  const $days = document.getElementById('days'+prefix);
+  const $hours = document.getElementById('hours'+prefix);
+  const $minutes = document.getElementById('minutes'+prefix);
+  const $seconds = document.getElementById('seconds'+prefix);
 
-      if (diff === 0) {
-        $mainText.textContent = '¡Ya es 28 de noviembre a las 14:30 en Argentina!';
-        $days.textContent = '0'; $hours.textContent = '0'; $minutes.textContent = '0'; $seconds.textContent = '0';
-        return;
-      }
+  function update() {
+    const now = new Date();
+    const diff = Math.max(0, targetDate - now);
+    const secsTotal = Math.floor(diff / 1000);
+    const days = Math.floor(secsTotal / (24*3600));
+    const hours = Math.floor((secsTotal % (24*3600)) / 3600);
+    const minutes = Math.floor((secsTotal % 3600) / 60);
+    const seconds = secsTotal % 60;
+    $days.textContent = days;
+    $hours.textContent = hours;
+    $minutes.textContent = minutes;
+    $seconds.textContent = seconds;
+  }
+  update();
+  setInterval(update, 1000);
+}
 
-      const secsTotal = Math.floor(diff / 1000);
-      const days = Math.floor(secsTotal / (24*3600));
-      const hours = Math.floor((secsTotal % (24*3600)) / 3600);
-      const minutes = Math.floor((secsTotal % 3600) / 60);
-      const seconds = secsTotal % 60;
+const year = new Date().getFullYear();
+const nov1430 = new Date(Date.UTC(year,10,28,17,30,0)); // 14:30 AR = 17:30 UTC
+const nov1700 = new Date(Date.UTC(year,10,28,20,0,0)); // 17:00 AR = 20:00 UTC
+const xmas = new Date(Date.UTC(year,11,25,3,0,0)); // 00:00 AR = 03:00 UTC
+const newYear = new Date(Date.UTC(year+1,0,1,3,0,0)); // 00:00 AR = 03:00 UTC
 
-      $days.textContent = days;
-      $hours.textContent = hours;
-      $minutes.textContent = minutes;
-      $seconds.textContent = seconds;
-
-      let text = `Faltan ${days} día${days!==1?'s':''} con ${hours} hora${hours!==1?'s':''} ${minutes} minuto${minutes!==1?'s':''} para el 28 de noviembre a las 14:30.`;
-      $mainText.textContent = text;
-    }
-
-    update();
-    setInterval(update, 1000);
-  </script>
+createCountdown(nov1430, 1);
+createCountdown(nov1700, 2);
+createCountdown(xmas, 3);
+createCountdown(newYear, 4);
+</script>
 </body>
 </html>
+
