@@ -1,124 +1,246 @@
-<!doctype html>
+    <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>🎉 Cuentas regresivas</title>
-  <style>
-    :root {
-      --bg1: linear-gradient(180deg,#021028 0%,#081022 100%);
-      --bg2: linear-gradient(180deg,#03172d 0%,#081835 100%);
-      --bg3: linear-gradient(180deg,#062e0a 0%,#123b10 100%);
-      --bg4: linear-gradient(180deg,#1b1830 0%,#0a0a1f 100%);
-      --card: rgba(255,255,255,0.05);
-      --muted:#9ca3af;
-      --accent1:#7dd3fc; --accent2:#7da7fc; --accent3:#7ef07a; --accent4:#ffd56a;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#e6eef8;background:var(--bg1);transition:background 1s;}
-    .section{width:100%;display:flex;justify-content:center;padding:40px 0;}
-    .card{background:var(--card);padding:28px;border-radius:18px;box-shadow:0 10px 30px rgba(2,6,23,0.6);width:min(720px,94%);text-align:center}
-    h1{margin:0 0 10px;font-size:22px;letter-spacing:0.4px}
-    .target{color:var(--muted);font-size:14px;margin-bottom:22px}
-    .count{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-    .segment{background:rgba(255,255,255,0.02);padding:14px 18px;border-radius:12px;min-width:110px}
-    .num{font-size:30px;font-weight:700}
-    .label{font-size:13px;color:var(--muted);margin-top:6px}
-    @media (max-width:420px){.num{font-size:24px}.segment{min-width:86px}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arcade HTML5 ULTRA DETALLADO – Juegos + Cronómetros + Ranking 🎯</title>
+<style>
+    /* ================== ESTILO GLOBAL ================== */
+    body { font-family: Arial, sans-serif; background: linear-gradient(180deg,#121212 0%,#1f1f1f 100%); color:#fff; margin:0; padding:0 }
+    header { background:#202020; padding:25px; text-align:center; font-size:32px; font-weight:bold; box-shadow:0 3px 10px rgba(0,0,0,0.4); }
+    nav{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:18px}
+    nav button{padding:10px 14px;border-radius:8px;border:none;background:#333;color:#fff;cursor:pointer}
+    nav button:hover{background:#4a4a4a}
+    .section{display:none;padding:18px;animation:fadeIn .3s}
+    .active{display:block}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    h2{ text-align:center;margin-bottom:10px }
+    .small{font-size:13px;color:#c7c7c7}
+
+    /* TicTacToe */
+    .ttt-controls{display:flex;gap:12px;justify-content:center;align-items:center;margin-bottom:8px}
+    .grid{display:grid;grid-template-columns:repeat(3,110px);gap:10px;margin:12px auto;width:350px}
+    .cell{width:110px;height:110px;background:#2c2c2c;display:flex;align-items:center;justify-content:center;font-size:48px;border-radius:10px;cursor:pointer;user-select:none}
+    .cell:hover{background:#3a3a3a}
+    .ttt-info{ text-align:center;margin-bottom:8px }
+
+    /* Click target */
+    #clickTargetArea{width:330px;height:330px;background:#2a2a2a;margin:auto;position:relative;overflow:hidden;border-radius:8px}
+    .target{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;cursor:pointer}
+    .missions{max-width:700px;margin:12px auto;text-align:left;background:#222;padding:12px;border-radius:8px;border:1px solid #333}
+    .mission-ok{color:#7ef0a3;font-weight:700}
+    .mission-pending{color:#f0d87e}
+
+    /* Memory */
+    .memory-grid{display:grid;grid-template-columns:repeat(4,90px);gap:15px;justify-content:center}
+    .card{width:90px;height:90px;background:#444;display:flex;align-items:center;justify-content:center;font-size:44px;border-radius:10px;cursor:pointer}
+
+    /* Leaderboard */
+    table{width:85%;margin:auto;border-collapse:collapse;background:#262626}
+    td,th{border:1px solid #555;padding:10px;text-align:center}
+    th{background:#333}
+
+    @media(max-width:700px){.grid{grid-template-columns:repeat(3,80px)}.cell{width:80px;height:80px;font-size:32px}.memory-grid{grid-template-columns:repeat(4,60px)}.card{width:60px;height:60px;font-size:28px}#clickTargetArea{width:260px;height:260px}}
+</style>
 </head>
 <body>
-  <!-- 28 de noviembre 14:30 -->
-  <div class="section" style="background:var(--bg1)">
-    <div class="card">
-      <h1>🕓 Cuenta regresiva — 28 de noviembre a las 14:30 (Turno mañana)</h1>
-      <div class="target">Faltan — hasta <strong>28 de noviembre a las 14:30 (hora argentina)</strong></div>
-      <div class="count" id="count1">
-        <div class="segment"><div class="num" id="days1">0</div><div class="label">días</div></div>
-        <div class="segment"><div class="num" id="hours1">0</div><div class="label">horas</div></div>
-        <div class="segment"><div class="num" id="minutes1">0</div><div class="label">minutos</div></div>
-        <div class="segment"><div class="num" id="seconds1">0</div><div class="label">segundos</div></div>
-      </div>
+<header>🎮 Arcade HTML5 ULTRA DETALLADO – Juegos + Cronómetros + Ranking</header>
+
+<nav>
+  <button onclick="show('countdowns')">⏳ Cuenta regresiva</button>
+  <button onclick="show('tictactoe')">❌ Tic Tac Toe</button>
+  <button onclick="show('clickgame')">🎯 Click Target</button>
+  <button onclick="show('memory')">🧠 Memory</button>
+  <button onclick="show('leaderboard')">🏆 Leaderboard</button>
+</nav>
+
+<!-- ====== COUNTDOWNS ====== -->
+<section id="countdowns" class="section active">
+  <h2>Cuenta regresiva a Navidad 🎄</h2>
+  <div id="navidad" style="text-align:center;font-size:24px"></div>
+  <h2>Cuenta regresiva a Año Nuevo 🎆</h2>
+  <div id="anonuevo" style="text-align:center;font-size:24px"></div>
+</section>
+
+<!-- ====== TIC TAC TOE - integrado con opciones solo/ia/pvp ====== -->
+<section id="tictactoe" class="section">
+  <h2>Tic Tac Toe – 3 en línea</h2>
+  <div class="ttt-info">
+    <div class="ttt-controls">
+      <label><input type="radio" name="ttt-mode" value="pvp" checked> 1 vs 1 (PvP)</label>
+      <label><input type="radio" name="ttt-mode" value="ai"> Jugador vs IA</label>
+      <label><input type="radio" name="ttt-mode" value="ai-vs-ai"> IA vs IA (ver juego automático)</label>
+      <select id="ttt-diff" title="Dificultad IA">
+        <option value="easy">Fácil (aleatorio)</option>
+        <option value="medium">Medio (bloquea/ataca)</option>
+        <option value="hard">Difícil (Minimax)</option>
+      </select>
+      <button onclick="resetTTT()">🔄 Reiniciar</button>
+      <button onclick="startAIVsAI()">▶︎ Ejecutar IA vs IA</button>
     </div>
+    <div id="ttt-status" class="small">Modo: PvP — Turno: X</div>
   </div>
 
-  <!-- 28 de noviembre 17:00 -->
-  <div class="section" style="background:var(--bg2)">
-    <div class="card">
-      <h1>🕔 Cuenta regresiva — 28 de noviembre a las 17:00 (Turno tarde)</h1>
-      <div class="target">Faltan — hasta <strong>28 de noviembre a las 17:00 (hora argentina)</strong></div>
-      <div class="count" id="count2">
-        <div class="segment"><div class="num" id="days2">0</div><div class="label">días</div></div>
-        <div class="segment"><div class="num" id="hours2">0</div><div class="label">horas</div></div>
-        <div class="segment"><div class="num" id="minutes2">0</div><div class="label">minutos</div></div>
-        <div class="segment"><div class="num" id="seconds2">0</div><div class="label">segundos</div></div>
-      </div>
-    </div>
-  </div>
+  <div class="grid" id="tttGrid"></div>
+  <div style="text-align:center;margin-top:8px;" id="ttt-feedback"></div>
+</section>
 
-  <!-- Navidad -->
-  <div class="section" style="background:var(--bg3)">
-    <div class="card">
-      <h1>🎄 Cuenta regresiva — 25 de diciembre a las 00:00</h1>
-      <div class="target">Faltan — hasta <strong>25 de diciembre a las 00:00 (Navidad)</strong></div>
-      <div class="count" id="count3">
-        <div class="segment"><div class="num" id="days3">0</div><div class="label">días</div></div>
-        <div class="segment"><div class="num" id="hours3">0</div><div class="label">horas</div></div>
-        <div class="segment"><div class="num" id="minutes3">0</div><div class="label">minutos</div></div>
-        <div class="segment"><div class="num" id="seconds3">0</div><div class="label">segundos</div></div>
-      </div>
-    </div>
+<!-- ====== CLICK TARGET (con misiones) ====== -->
+<section id="clickgame" class="section">
+  <h2>Click Target – 30 segundos</h2>
+  <div class="missions">
+    <h3>Misiones (Click Target)</h3>
+    <ol>
+      <li id="m1" class="mission-pending"><strong>Objetivo 1:</strong> HAZ <strong>100 PUNTOS EN 30 SEGUNDOS</strong></li>
+      <li id="m2" class="mission-pending"><strong>Objetivo 2:</strong> Alcanzar <strong>150 puntos</strong> en una sola partida.</li>
+      <li id="m3" class="mission-pending"><strong>Objetivo 3:</strong> Lograr <strong>3 partidas seguidas</strong> con más de 80 puntos.</li>
+    </ol>
   </div>
+  <p style="text-align:center">Puntos: <span id="clickScore">0</span> — Tiempo: <span id="clickTime">30</span>s</p>
+  <div id="clickTargetArea"></div>
+  <center style="margin-top:10px"><button onclick="startClickGame()">▶ Iniciar partida (30s)</button>
+  <button onclick="resetClickStats()">♻️ Resetear misiones</button></center>
+  <p id="clickFeedback" style="text-align:center;margin-top:8px"></p>
+</section>
 
-  <!-- Año Nuevo -->
-  <div class="section" style="background:var(--bg4)">
-    <div class="card">
-      <h1>🎆 Cuenta regresiva — 1 de enero a las 00:00</h1>
-      <div class="target">Faltan — hasta <strong>1 de enero a las 00:00 (Año Nuevo)</strong></div>
-      <div class="count" id="count4">
-        <div class="segment"><div class="num" id="days4">0</div><div class="label">días</div></div>
-        <div class="segment"><div class="num" id="hours4">0</div><div class="label">horas</div></div>
-        <div class="segment"><div class="num" id="minutes4">0</div><div class="label">minutos</div></div>
-        <div class="segment"><div class="num" id="seconds4">0</div><div class="label">segundos</div></div>
-      </div>
-    </div>
-  </div>
+<!-- ====== MEMORY ====== -->
+<section id="memory" class="section">
+  <h2>Memory – Encuentra los pares</h2>
+  <p style="text-align:center">Pares encontrados: <span id="memoryPairs">0</span>/8</p>
+  <div class="memory-grid" id="memoryGrid"></div>
+  <center style="margin-top:10px"><button onclick="startMemory()">🔄 Reiniciar</button></center>
+</section>
+
+<!-- ====== LEADERBOARD ====== -->
+<section id="leaderboard" class="section">
+  <h2>🏆 Clasificación global de juegos</h2>
+  <table>
+    <tr><th>Juego</th><th>Mejor puntaje</th></tr>
+    <tr><td>Tic Tac Toe</td><td id="lbTTT">-</td></tr>
+    <tr><td>Click Target</td><td id="lbClick">-</td></tr>
+    <tr><td>Memory</td><td id="lbMemory">-</td></tr>
+  </table>
+</section>
 
 <script>
-function createCountdown(targetDate, prefix) {
-  const $days = document.getElementById('days'+prefix);
-  const $hours = document.getElementById('hours'+prefix);
-  const $minutes = document.getElementById('minutes'+prefix);
-  const $seconds = document.getElementById('seconds'+prefix);
+/* ================== UI: mostrar secciones ================== */
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 
-  function update() {
-    const now = new Date();
-    const diff = Math.max(0, targetDate - now);
-    const secsTotal = Math.floor(diff / 1000);
-    const days = Math.floor(secsTotal / (24*3600));
-    const hours = Math.floor((secsTotal % (24*3600)) / 3600);
-    const minutes = Math.floor((secsTotal % 3600) / 60);
-    const seconds = secsTotal % 60;
-    $days.textContent = days;
-    $hours.textContent = hours;
-    $minutes.textContent = minutes;
-    $seconds.textContent = seconds;
-  }
-  update();
-  setInterval(update, 1000);
+/* ================== COUNTDOWNS ================== */
+function countdown(id,date){setInterval(()=>{let now=new Date().getTime();let diff=date-now;if(diff<0){document.getElementById(id).innerHTML='¡Llegó el día!';return}let d=Math.floor(diff/(1000*60*60*24));let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));let m=Math.floor((diff%(1000*60*60))/(1000*60));let s=Math.floor((diff%(1000*60))/1000);document.getElementById(id).innerHTML=`${d} días – ${h}h ${m}m ${s}s`;},1000)}
+countdown('navidad',new Date(new Date().getFullYear(),11,25,0,0,0));countdown('anonuevo',new Date(new Date().getFullYear(),11,31,0,0,0));
+
+/* ================== TIC TAC TOE (PvP / vs IA / IA vs IA) ================== */
+let tttBoard = Array(9).fill(''); let tttTurn = 'X'; let tttRunning = false; let tttMode = 'pvp';
+const winCombo = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+// draw
+function renderTTT(){const g=document.getElementById('tttGrid');g.innerHTML='';tttBoard.forEach((v,i)=>{const d=document.createElement('div');d.className='cell';d.innerText=v;d.onclick=()=>handleTTTClick(i);g.appendChild(d)});updateTTTStatus();}
+function updateTTTStatus(){document.getElementById('ttt-status').innerText = `Modo: ${tttMode.toUpperCase()} — Turno: ${tttTurn}`}
+
+// start/reset
+function resetTTT(){tttBoard = Array(9).fill(''); tttTurn='X'; tttRunning=true; tttMode = document.querySelector('input[name="ttt-mode"]:checked').value; document.getElementById('ttt-feedback').innerText=''; renderTTT(); if(tttMode==='ai-vs-ai'){runAIVsAI(false)} }
+
+// handle click
+function handleTTTClick(i){if(!tttRunning) resetTTT(); if(tttBoard[i] !== '') return; if(tttMode==='ai-vs-ai'){alert('Desactiva IA vs IA para jugar.'); return;} if(tttMode==='ai' && tttTurn==='O'){ return } // bloquear clicks cuando sea turno IA
+
+// player move
+tttBoard[i] = tttTurn; if(checkWin(tttTurn)){finishTTT(tttTurn); return;} if(!tttBoard.includes('')){finishTTT('tie'); return;} // continue
+
+tttTurn = tttTurn === 'X' ? 'O' : 'X'; renderTTT();
+
+// if mode is vs AI and now is AI's turn -> AI move
+if(tttMode==='ai' && tttTurn==='O'){setTimeout(()=>aiMakeMove(),300)} }
+
+function finishTTT(winner){tttRunning=false; if(winner==='tie'){document.getElementById('ttt-feedback').innerText='Empate!'; saveScore('ttt',0);} else {document.getElementById('ttt-feedback').innerText=`Gana ${winner}!`; saveScore('ttt', winner==='X'?100:50);} updateLB(); }
+
+function checkWin(p){return winCombo.some(c=>c.every(i=>tttBoard[i]===p));}
+
+// =========== AI behaviors ===========
+function aiMakeMove(){const diff = document.getElementById('ttt-diff').value; if(diff==='easy'){aiRandomMove()}else if(diff==='medium'){if(!aiTryWinOrBlock()) aiRandomMove()} else { // hard: minimax
+    const best = minimax(tttBoard, 'O'); tttBoard[best.index] = 'O'; if(checkWin('O')){finishTTT('O'); return;} if(!tttBoard.includes('')){finishTTT('tie');return;} tttTurn='X'; renderTTT(); return; }
+renderTTT(); // after easy/medium move
+if(checkWin('O')){finishTTT('O');return;} if(!tttBoard.includes('')){finishTTT('tie');return;} tttTurn='X';}
+
+function aiRandomMove(){const empties=tttBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null);const pick=empties[Math.floor(Math.random()*empties.length)]; tttBoard[pick]='O';}
+
+function aiTryWinOrBlock(){// try win
+  let empties=tttBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+  for(const i of empties){ tttBoard[i]='O'; if(checkWin('O')) return true; tttBoard[i]=''; }
+  // try block X
+  for(const i of empties){ tttBoard[i]='X'; if(checkWin('X')){ tttBoard[i]='O'; return true } tttBoard[i]=''; }
+  return false;
 }
 
-const year = new Date().getFullYear();
-const nov1430 = new Date(Date.UTC(year,10,28,17,30,0)); // 14:30 AR = 17:30 UTC
-const nov1700 = new Date(Date.UTC(year,10,28,20,0,0)); // 17:00 AR = 20:00 UTC
-const xmas = new Date(Date.UTC(year,11,25,3,0,0)); // 00:00 AR = 03:00 UTC
-const newYear = new Date(Date.UTC(year+1,0,1,3,0,0)); // 00:00 AR = 03:00 UTC
+// Minimax implementation for 'hard' difficulty
+function minimax(newBoard, player){ // returns {index,score}
+  const avail = newBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+  // terminal checks
+  if(checkStaticWin(newBoard,'X')) return {score:-10};
+  if(checkStaticWin(newBoard,'O')) return {score:10};
+  if(avail.length===0) return {score:0};
 
-createCountdown(nov1430, 1);
-createCountdown(nov1700, 2);
-createCountdown(xmas, 3);
-createCountdown(newYear, 4);
+  const moves = [];
+  for(const i of avail){ const move = {}; move.index = i; newBoard[i] = player; if(player==='O'){ const result = minimax(newBoard,'X'); move.score = result.score; } else { const result = minimax(newBoard,'O'); move.score = result.score; } newBoard[i] = ''; moves.push(move); }
+  // choose best
+  let bestMove;
+  if(player==='O'){ let bestScore=-Infinity; for(const m of moves){ if(m.score>bestScore){bestScore=m.score; bestMove=m}} return bestMove }
+  else { let bestScore=Infinity; for(const m of moves){ if(m.score<bestScore){bestScore=m.score; bestMove=m}} return bestMove }
+}
+
+function checkStaticWin(board,p){ return winCombo.some(c=>c.every(i=>board[i]===p)); }
+
+// =========== IA vs IA (auto) ===========
+let aiVsAiInterval=null;
+function startAIVsAI(){ if(aiVsAiInterval) { clearInterval(aiVsAiInterval); aiVsAiInterval=null; return } runAIVsAI(true) }
+function runAIVsAI(loop){ resetTTT(); tttMode='ai-vs-ai'; aiVsAiInterval = setInterval(()=>{ if(tttRunning===false){ clearInterval(aiVsAiInterval); aiVsAiInterval=null; return } // if game still running
+  // choose which side to move: X and O by minimax randomization
+  const diff = document.getElementById('ttt-diff').value;
+  if(!tttBoard.includes('')){ clearInterval(aiVsAiInterval); aiVsAiInterval=null; return }
+  // X move
+  if(tttTurn==='X'){
+    if(diff==='easy'){ // X random
+      const empties=tttBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null); tttBoard[empties[Math.floor(Math.random()*empties.length)]]='X';
+    } else if(diff==='medium'){ // medium for X
+      let made=false; const empties=tttBoard.map((v,i)=>v===''?i:null).filter(v=>v!==null);
+      for(const i of empties){ tttBoard[i]='X'; if(checkWin('X')){ made=true; break } tttBoard[i]=''; }
+      if(!made) tttBoard[empties[Math.floor(Math.random()*empties.length)]]='X';
+    } else { const best=minimax(tttBoard,'X'); tttBoard[best.index]='X' }
+    if(checkWin('X')){ finishTTT('X'); clearInterval(aiVsAiInterval); aiVsAiInterval=null; return }
+    tttTurn='O'; renderTTT();
+  } else { // O move
+    if(diff==='easy'){ aiRandomMove(); }
+    else if(diff==='medium'){ if(!aiTryWinOrBlock()) aiRandomMove(); }
+    else { const best = minimax(tttBoard,'O'); tttBoard[best.index]='O' }
+    if(checkWin('O')){ finishTTT('O'); clearInterval(aiVsAiInterval); aiVsAiInterval=null; return }
+    tttTurn='X'; renderTTT();
+  }
+ }, 450); }
+
+// ================= CLICK TARGET (misiones y lógica) =================
+let clickScore=0, clickTime=30, clickInterval=null; let ctMissions = JSON.parse(localStorage.getItem('ct_missions')||JSON.stringify({m1:false,m2:false,m3:false,consecutiveWins:0})); function updateMissionUI(){ document.getElementById('m1').className = ctMissions.m1? 'mission-ok':'mission-pending'; document.getElementById('m2').className = ctMissions.m2? 'mission-ok':'mission-pending'; document.getElementById('m3').className = ctMissions.m3? 'mission-ok':'mission-pending'; } updateMissionUI();
+function startClickGame(){ clickScore=0; clickTime=30; document.getElementById('clickScore').innerText=0; document.getElementById('clickTime').innerText=30; document.getElementById('clickFeedback').innerText=''; clearInterval(clickInterval); clickInterval=setInterval(()=>{ clickTime--; document.getElementById('clickTime').innerText=clickTime; if(clickTime<=0){ clearInterval(clickInterval); endClickRound(); } },1000); spawnTarget(); }
+function spawnTarget(){ if(clickTime<=0) return; const area=document.getElementById('clickTargetArea'); area.innerHTML=''; const t=document.createElement('div'); t.className='target'; const size=40+Math.floor(Math.random()*55); t.style.width=size+'px'; t.style.height=size+'px'; t.style.lineHeight=size+'px'; const rectW=area.clientWidth-size; const rectH=area.clientHeight-size; t.style.left=Math.floor(Math.random()*rectW)+'px'; t.style.top=Math.floor(Math.random()*rectH)+'px'; const bonus = Math.random()<0.12; if(bonus){ t.style.background='#ffd166'; t.textContent='×2'; t.dataset.points='2' } else { t.style.background='linear-gradient(180deg,#ff5f6d,#ff3b3b)'; t.textContent=''; t.dataset.points='1' } t.onclick=(ev)=>{ ev.stopPropagation(); const pts=parseInt(t.dataset.points||'1',10); clickScore+=pts; document.getElementById('clickScore').innerText=clickScore; const pop=document.createElement('div'); pop.style.position='absolute'; pop.style.left=t.style.left; pop.style.top=t.style.top; pop.style.transform='translate(-10px,-10px)'; pop.style.fontWeight='700'; pop.style.pointerEvents='none'; pop.innerText='+'+pts; area.appendChild(pop); setTimeout(()=>pop.remove(),500); spawnTarget(); }; area.appendChild(t); }
+function endClickRound(){ document.getElementById('clickFeedback').innerText='Partida finalizada. Puntaje: '+clickScore; saveScore('click',clickScore); if(!ctMissions.m1 && clickScore>=100) ctMissions.m1=true; if(!ctMissions.m2 && clickScore>=150) ctMissions.m2=true; if(clickScore>80) ctMissions.consecutiveWins=(ctMissions.consecutiveWins||0)+1; else ctMissions.consecutiveWins=0; if(!ctMissions.m3 && ctMissions.consecutiveWins>=3) ctMissions.m3=true; localStorage.setItem('ct_missions',JSON.stringify(ctMissions)); updateMissionUI(); }
+function resetClickStats(){ if(confirm('Resetear misiones de Click Target?')){ ctMissions={m1:false,m2:false,m3:false,consecutiveWins:0}; localStorage.setItem('ct_missions',JSON.stringify(ctMissions)); updateMissionUI(); alert('Misiones reseteadas.'); } }
+
+// ================= MEMORY =================
+let memoryCards=[]; let first=null,second=null; let pairs=0;
+function startMemory(){ const symbols=['🍎','🍌','🍇','🍓','🍒','🍑','🍍','🥝']; memoryCards=[...symbols,...symbols].sort(()=>Math.random()-0.5); pairs=0; first=null; second=null; document.getElementById('memoryPairs').innerText=0; renderMemory(); }
+function renderMemory(){ const g=document.getElementById('memoryGrid'); g.innerHTML=''; memoryCards.forEach((v,i)=>{ const c=document.createElement('div'); c.className='card'; c.innerText=(i===first||i===second)?v:'🂠'; c.onclick=()=>clickCard(i); g.appendChild(c); }); }
+function clickCard(i){ if(first===null){ first=i; renderMemory(); return } if(second===null && i!==first){ second=i; renderMemory(); setTimeout(()=>{ if(memoryCards[first]===memoryCards[second]){ pairs++; document.getElementById('memoryPairs').innerText=pairs; if(pairs===8) saveScore('memory',pairs*100); } first=null; second=null; renderMemory(); },600); } }
+startMemory();
+
+// ================= LEADERBOARD =================
+function saveScore(game,val){ let best=parseInt(localStorage.getItem(game)||'0',10); if(val>best){ localStorage.setItem(game,String(val)); } loadLB(); }
+function loadLB(){ document.getElementById('lbTTT').innerText=localStorage.getItem('ttt')||'-'; document.getElementById('lbClick').innerText=localStorage.getItem('click')||'-'; document.getElementById('lbMemory').innerText=localStorage.getItem('memory')||'-'; }
+function updateLB(){ loadLB(); }
+loadLB();
+
+// ================== helpers: save ttt best as score numbers ==================
+// we assign 100 for an X win, 50 for O win, 10 for tie (so leaderboard can compare)
+(function attachModeListeners(){ document.querySelectorAll('input[name="ttt-mode"]').forEach(r=>r.addEventListener('change',()=>{ tttMode = document.querySelector('input[name="ttt-mode"]:checked').value; document.getElementById('ttt-feedback').innerText=''; })) })();
+
 </script>
 </body>
 </html>
-
